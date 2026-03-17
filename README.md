@@ -33,7 +33,7 @@ It fetches live token stats from the pump.fun API (price, market cap, volume, ho
 ### 1. Clone & install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/crab-agent
+git clone https://github.com/buildOrDie/crab-agent
 cd crab-agent
 npm install
 ```
@@ -191,8 +191,8 @@ The `docs/` folder contains the GitHub Pages site — enable it in your repo set
 
 | File | URL |
 |------|-----|
-| `docs/index.html` | `your-username.github.io/crab-agent` |
-| `docs/demo.html` | `your-username.github.io/crab-agent/demo.html` |
+| `docs/index.html` | `buildOrDie.github.io/crab-agent` |
+| `docs/demo.html` | `buildOrDie.github.io/crab-agent/demo.html` |
 
 ---
 
