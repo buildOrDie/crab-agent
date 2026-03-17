@@ -1,0 +1,20 @@
+{
+  "name": "crab-agent",
+  "version": "1.0.0",
+  "description": "AI meme agent for $CRAB token on pump.fun",
+  "type": "module",
+  "main": "src/agent.js",
+  "scripts": {
+    "start": "node src/agent.js",
+    "dev": "POST_ENABLED=false node src/agent.js",
+    "once": "POST_ENABLED=false POST_INTERVAL_MS=0 node src/agent.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "node-fetch": "^3.3.2",
+    "twitter-api-v2": "^1.17.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

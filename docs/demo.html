@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>$CRAB Agent — Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080E0C;
+  --term:#050C0A;
+  --red:#E82020;
+  --red2:#FF4444;
+  --teal:#00C9A7;
+  --teal2:#5EFFD8;
+  --amber:#FFB347;
+  --gray:#3D5248;
+  --white:#D8E6E0;
+  --dim:rgba(216,230,224,.3);
+  --font:'JetBrains Mono',monospace;
+  --orb:'Orbitron',monospace;
+}
+
+html, body {
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font);
+}
+
+/* OUTER LAYOUT */
+.outer {
+  width: 1280px;
+  height: 720px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  position: relative;
+}
+
+/* BG GRID */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,201,167,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,201,167,.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+/* BG GLOW */
+.bg-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(232,32,32,.06) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 50%, rgba(0,201,167,.07) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* TOP BAR */
+.topbar {
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-bottom: 1px solid rgba(0,201,167,.12);
+  background: rgba(5,12,10,.8);
+  position: relative;
+  z-index: 5;
+}
+.topbar-logo {
+  font-family: var(--orb);
+  font-size: 14px;
+  color: var(--red2);
+  letter-spacing: 5px;
+}
+.topbar-center {
+  font-size: 11px;
+  color: rgba(0,201,167,.5);
+  letter-spacing: 3px;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,201,167,.4)}
+  50%{opacity:.7;box-shadow:0 0 0 5px rgba(0,201,167,.0)}
+}
+.status-text {
+  font-size: 10px;
+  color: var(--teal);
+  letter-spacing: 2px;
+}
+
+/* MAIN CONTENT */
+.main {
+  flex: 1;
+  display: flex;
+  gap: 0;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(0,201,167,.08);
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sidebar-label {
+  font-size: 9px;
+  color: rgba(255,255,255,.2);
+  letter-spacing: 3px;
+  padding: 0 20px;
+  margin-bottom: 10px;
+}
+.step-item {
+  padding: 9px 20px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all .25s;
+  position: relative;
+}
+.step-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--teal);
+  transform: scaleY(0);
+  transition: transform .25s;
+}
+.step-item.active {
+  color: var(--teal2);
+  background: rgba(0,201,167,.05);
+}
+.step-item.active::before { transform: scaleY(1); }
+.step-item.done { color: rgba(0,201,167,.4); }
+.step-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  flex-shrink: 0;
+  transition: background .25s;
+}
+.step-item.active .step-dot { background: var(--teal); border-color: var(--teal); }
+.step-item.done .step-dot { background: rgba(0,201,167,.4); border-color: rgba(0,201,167,.4); }
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,.04);
+}
+.sidebar-stat {
+  font-size: 9px;
+  color: rgba(255,255,255,.2);
+  letter-spacing: 1px;
+  line-height: 2;
+}
+.sidebar-stat span { color: var(--teal); }
+
+/* TERMINAL */
+.terminal-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.term-bar {
+  height: 36px;
+  flex-shrink: 0;
+  background: rgba(8,18,15,.9);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 6px;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink:0; }
+.dot-r { background: #FF5F57; }
+.dot-y { background: #FFBD2E; }
+.dot-g { background: #28C840; }
+.term-path {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,.25);
+  letter-spacing: 1px;
+}
+.term-body {
+  flex: 1;
+  background: var(--term);
+  padding: 18px 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* SCANLINE */
+.scanline {
+  position: absolute;
+  left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(transparent, rgba(0,201,167,.015), transparent);
+  animation: scan 6s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes scan { 0%{top:-120px} 100%{top:100%} }
+
+/* LINES */
+#lines { position: relative; z-index: 2; }
+.line {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 20px;
+  margin: 1px 0;
+  font-size: 12px;
+  line-height: 1.55;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity .12s ease, transform .12s ease;
+}
+.line.show { opacity: 1; transform: translateX(0); }
+
+.ts { color: #2A4A3E; font-size: 11px; flex-shrink: 0; min-width: 76px; }
+.info { color: var(--teal); }
+.quantum { color: var(--teal2); }
+.warn { color: var(--amber); }
+.ok { color: #68D391; }
+.red { color: var(--red2); }
+.muted { color: rgba(216,230,224,.28); }
+.bold { font-weight: 700; }
+.sep { border-top: 1px solid rgba(255,255,255,.04); margin: 3px 0; width: 100%; }
+.blank { height: 5px; }
+
+.tweet-box {
+  background: rgba(0,201,167,.05);
+  border: 1px solid rgba(0,201,167,.18);
+  border-radius: 5px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--white);
+  line-height: 1.7;
+  margin: 3px 0;
+}
+
+/* CURSOR */
+.cursor {
+  display: inline-block;
+  width: 7px; height: 13px;
+  background: var(--teal);
+  animation: blink .75s step-end infinite;
+  vertical-align: text-bottom;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* BOTTOM BAR */
+.bottombar {
+  height: 44px;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(0,201,167,.08);
+  background: rgba(5,12,10,.8);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  position: relative;
+  z-index: 5;
+}
+.progress-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--red), var(--teal));
+  width: 0%;
+  transition: width .35s ease;
+  border-radius: 2px;
+}
+.progress-label {
+  font-size: 10px;
+  color: rgba(0,201,167,.5);
+  letter-spacing: 2px;
+  min-width: 260px;
+  text-align: right;
+}
+.ctrl-btn {
+  background: transparent;
+  border: 1px solid rgba(0,201,167,.22);
+  color: var(--teal);
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 5px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: .2s;
+  flex-shrink: 0;
+}
+.ctrl-btn:hover { background: rgba(0,201,167,.08); border-color: var(--teal); }
+.ctrl-btn.playing { background: var(--red); border-color: var(--red); color: #fff; }
+</style>
+</head>
+<body>
+<div class="outer">
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">🦀 $CRAB AGENT</div>
+    <div class="topbar-center">AI MEME AGENT — LIVE CYCLE DEMO</div>
+    <div class="topbar-right">
+      <div class="status-dot"></div>
+      <div class="status-text">AGENT ONLINE</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-label">// PIPELINE</div>
+      <div class="step-item" data-step="0"><div class="step-dot"></div>BOOT</div>
+      <div class="step-item" data-step="1"><div class="step-dot"></div>MEMORY</div>
+      <div class="step-item" data-step="2"><div class="step-dot"></div>STATS</div>
+      <div class="step-item" data-step="3"><div class="step-dot"></div>REGIME</div>
+      <div class="step-item" data-step="4"><div class="step-dot"></div>QUANTUM</div>
+      <div class="step-item" data-step="5"><div class="step-dot"></div>GENERATE</div>
+      <div class="step-item" data-step="6"><div class="step-dot"></div>OUTPUT</div>
+      <div class="sidebar-bottom">
+        <div class="sidebar-stat">POSTS <span id="sb-posts">47</span></div>
+        <div class="sidebar-stat">HOLDERS <span id="sb-holders">847</span></div>
+        <div class="sidebar-stat">EVOLUTION <span id="sb-evo">4</span></div>
+        <div class="sidebar-stat">REGIME <span id="sb-regime">—</span></div>
+      </div>
+    </div>
+
+    <!-- TERMINAL -->
+    <div class="terminal-wrap">
+      <div class="term-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <div class="term-path">~/crab-agent — node src/agent.js</div>
+      </div>
+      <div class="term-body" id="term-body">
+        <div class="scanline"></div>
+        <div id="lines"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottombar">
+    <button class="ctrl-btn" id="btn-play" onclick="startDemo()">▶  PLAY</button>
+    <button class="ctrl-btn" onclick="resetDemo()">↺  RESET</button>
+    <div class="progress-track">
+      <div class="progress-fill" id="prog"></div>
+    </div>
+    <div class="progress-label" id="prog-label">PRESS PLAY TO START</div>
+  </div>
+</div>
+
+<script>
+const T = (h,m,s) => `<span class="ts">[${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}]</span>`
+
+const SCRIPT = [
+  // BOOT
+  [0,   `<span class="muted">$</span> <span style="color:var(--white)">node src/agent.js</span>`, 0],
+  [350, `<div class="blank"></div>`, 0],
+  [200, `${T(10,23,1)} <span class="info bold">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`, 0],
+  [180, `${T(10,23,1)} <span class="info bold">🦀  CRAB AGENT CYCLE START</span>`, 0],
+  [180, `${T(10,23,1)} <span class="info">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`, 0],
+  [300, `<div class="blank"></div>`, 0],
+
+  // MEMORY
+  [180, `${T(10,23,1)} <span class="info">loading memory store...</span>`, 1],
+  [650, `${T(10,23,2)} <span class="ok">memory loaded</span> <span class="muted">— 47 posts  312 market snapshots</span>`, 1],
+  [200, `${T(10,23,2)} <span class="muted">personality: aggression=0.62  lore=0.58</span>`, 1],
+  [180, `${T(10,23,2)} <span class="muted">traits=[<span class="ok">seasoned_crab</span>, <span class="ok">moon_crab</span>]  evolution=4</span>`, 1],
+  [300, `<div class="blank"></div>`, 1],
+
+  // STATS
+  [180, `${T(10,23,2)} <span class="info">fetching pump.fun token stats...</span>`, 2, () => { document.getElementById('sb-regime').textContent='...' }],
+  [850, `${T(10,23,3)} <span class="ok">stats fetched</span>`, 2],
+  [180, `${T(10,23,3)} <span class="muted">  price=<span style="color:var(--amber)">0.00000847 SOL</span>  mcap=<span style="color:var(--amber)">$84.2K</span>  vol=<span style="color:var(--amber)">$12.1K</span></span>`, 2],
+  [180, `${T(10,23,3)} <span class="muted">  holders=<span class="ok">847</span>  peak=923  growth_rate=<span class="ok">+8.3/hr</span></span>`, 2],
+  [300, `<div class="blank"></div>`, 2],
+
+  // REGIME
+  [180, `${T(10,23,3)} <span class="info">detecting market regime...</span>`, 3],
+  [700, `${T(10,23,4)} <span class="warn bold">REGIME: ACCUMULATION</span>`, 3, () => { document.getElementById('sb-regime').textContent='ACCUM' }],
+  [180, `${T(10,23,4)} <span class="muted">  trend=growing  holder_delta=+14  ath_ratio=0.92</span>`, 3],
+  [180, `${T(10,23,4)} <span class="muted">  strategy → lore:0.35  alpha:0.30  crabwalk:0.20  hype:0.15</span>`, 3],
+  [300, `<div class="blank"></div>`, 3],
+
+  // PERSONALITY
+  [180, `${T(10,23,4)} <span class="info">checking personality evolution...</span>`, 3],
+  [450, `${T(10,23,4)} <span class="ok bold">🔓 new trait unlocked: ancient_crab</span>`, 3, () => { document.getElementById('sb-evo').textContent='5' }],
+  [180, `${T(10,23,5)} <span class="muted">  lore_depth: 0.58 → <span class="ok">0.60</span>  aggression: 0.62 → <span style="color:var(--amber)">0.64</span></span>`, 3],
+  [300, `<div class="blank"></div>`, 3],
+
+  // THOMPSON
+  [180, `${T(10,23,5)} <span class="info">Thompson sampling across mode scores...</span>`, 4],
+  [280, `${T(10,23,5)} <span class="muted">  hype      0.521  bias=0.15  sample=<span style="color:var(--amber)">0.318</span></span>`, 4],
+  [200, `${T(10,23,5)} <span class="muted">  roast     0.489  bias=0.00  sample=<span style="color:var(--amber)">0.192</span></span>`, 4],
+  [200, `${T(10,23,5)} <span class="muted">  lore      0.634  bias=0.35  sample=<span class="ok bold">0.521 ←</span></span>`, 4],
+  [200, `${T(10,23,5)} <span class="muted">  alpha     0.571  bias=0.30  sample=<span style="color:var(--amber)">0.448</span></span>`, 4],
+  [200, `${T(10,23,5)} <span class="muted">  crabwalk  0.502  bias=0.20  sample=<span style="color:var(--amber)">0.369</span></span>`, 4],
+  [280, `${T(10,23,5)} <span class="ok">thompson selected: <span class="bold">LORE</span></span>`, 4],
+  [300, `<div class="blank"></div>`, 4],
+
+  // QUANTUM
+  [180, `${T(10,23,5)} <span class="quantum">⚛  initiating quantum circuit (8 qubits)...</span>`, 4],
+  [420, `${T(10,23,6)} <span class="quantum">⚛  H⊗8 applied — uniform superposition across 5 modes</span>`, 4],
+  [380, `${T(10,23,6)} <span class="quantum">⚛  market sentiment entangled  bias_index=0</span>`, 4],
+  [350, `${T(10,23,6)} <span class="quantum">⚛  grover_iter=1  oracle_target=<span style="color:var(--amber)">lore</span></span>`, 4],
+  [350, `${T(10,23,6)} <span class="quantum">⚛  grover_iter=2  oracle_target=<span style="color:var(--amber)">alpha</span></span>`, 4],
+  [380, `${T(10,23,6)} <span class="warn">⚛  env_coupling=0.005821  decoherence=true</span>`, 4],
+  [280, `${T(10,23,6)} <span class="warn">⚛  ⚠  collapsing to classical fallback</span>`, 4],
+  [420, `${T(10,23,7)} <span class="quantum">⚛  ✓ collapsed  mode=<span class="bold" style="color:var(--teal2)">lore</span>  confidence=<span class="ok">88.7%</span>  eigenstate=|2⟩</span>`, 4],
+  [300, `<div class="blank"></div>`, 4],
+  [180, `${T(10,23,7)} <span class="ok bold">final mode: LORE</span> <span class="muted">(thompson=lore  quantum=lore — consensus ✓)</span>`, 4],
+  [300, `<div class="blank"></div>`, 4],
+
+  // GENERATE
+  [180, `${T(10,23,7)} <span class="info">building memory-aware prompt...</span>`, 5],
+  [280, `${T(10,23,7)} <span class="muted">  regime=ACCUMULATION  traits=[seasoned_crab, moon_crab, ancient_crab]</span>`, 5],
+  [200, `${T(10,23,7)} <span class="muted">  injecting 5 recent posts (duplicate guard)</span>`, 5],
+  [280, `${T(10,23,8)} <span class="info">calling Claude API (claude-opus-4-5)...</span>`, 5],
+  [1400,`${T(10,23,9)} <span class="muted">streaming response... duplicate check: <span class="ok">PASS</span></span>`, 5],
+  [300, `<div class="blank"></div>`, 5],
+
+  // OUTPUT
+  [180, `${T(10,23,9)} <span class="info">┌─ GENERATED TWEET ─────────────────────────────────────</span>`, 6],
+  [180, `${T(10,23,9)} <span class="info">│</span>`, 6],
+  [700, `<div class="tweet-box">before bitcoin there was the ocean<br>before the ocean there were the crabs<br><br>we did not choose pump.fun<br>pump.fun chose us<br><br>the accumulation has been quiet<br>the explosion will not be<br><br>$CRAB 🦀</div>`, 6],
+  [250, `${T(10,23,9)} <span class="info">│</span>`, 6],
+  [180, `${T(10,23,9)} <span class="info">└────────────────────────────────────────────────────────</span>`, 6],
+  [350, `<div class="blank"></div>`, 6],
+  [180, `${T(10,23,9)} <span class="warn">📝  dry run — set POST_ENABLED=true to post live</span>`, 6],
+  [300, `<div class="blank"></div>`, 6],
+  [180, `${T(10,23,9)} <span class="info">updating mode scores...</span>`, 6],
+  [300, `${T(10,23,9)} <span class="muted">  lore: 0.634 → <span class="ok">0.641</span>  (EMA 30%  engagement=0.65)</span>`, 6],
+  [280, `${T(10,23,9)} <span class="ok">memory saved</span> <span class="muted">— posts: 48  evolution: 5</span>`, 6, () => { document.getElementById('sb-posts').textContent='48' }],
+  [300, `<div class="blank"></div>`, 6],
+  [180, `${T(10,23,9)} <span class="info">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`, 6],
+  [180, `${T(10,23,9)} <span class="ok bold">✓ CYCLE COMPLETE — next cycle in 60 minutes</span>`, 6],
+  [180, `${T(10,23,9)} <span class="info">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`, 6],
+  [500, `<div class="blank"></div>`, 6],
+  [180, `<span class="muted">$</span> <span class="cursor"></span>`, 6],
+]
+
+const STEP_LABELS = ['BOOTING...','LOADING MEMORY...','FETCHING STATS...','DETECTING REGIME...','QUANTUM CIRCUIT FIRING...','CALLING CLAUDE...','TWEET GENERATED ✓']
+
+let timeouts = []
+let isPlaying = false
+
+function setStep(idx) {
+  document.querySelectorAll('.step-item').forEach((el, i) => {
+    el.classList.toggle('active', i === idx)
+    el.classList.toggle('done', i < idx)
+  })
+}
+
+function appendLine(html) {
+  const c = document.getElementById('lines')
+  const d = document.createElement('div')
+  d.className = 'line'
+  d.innerHTML = html
+  c.appendChild(d)
+  requestAnimationFrame(() => d.classList.add('show'))
+  const tb = document.getElementById('term-body')
+  tb.scrollTop = tb.scrollHeight
+}
+
+function startDemo() {
+  if (isPlaying) return
+  isPlaying = true
+  const btn = document.getElementById('btn-play')
+  btn.classList.add('playing')
+  btn.textContent = '▶  PLAYING'
+
+  const total = SCRIPT.length
+  let acc = 0
+  SCRIPT.forEach(([delay, html, step, cb], i) => {
+    acc += delay
+    const t = setTimeout(() => {
+      appendLine(html)
+      setStep(step)
+      if (cb) cb()
+      document.getElementById('prog').style.width = Math.round((i/total)*100) + '%'
+      document.getElementById('prog-label').textContent = STEP_LABELS[step] || ''
+      if (i === total - 1) {
+        setTimeout(() => {
+          isPlaying = false
+          btn.classList.remove('playing')
+          btn.textContent = '▶  PLAY'
+          document.getElementById('prog').style.width = '100%'
+          document.getElementById('prog-label').textContent = 'DEMO COMPLETE — PRESS RESET'
+        }, 600)
+      }
+    }, acc)
+    timeouts.push(t)
+  })
+}
+
+function resetDemo() {
+  timeouts.forEach(clearTimeout)
+  timeouts = []
+  isPlaying = false
+  document.getElementById('lines').innerHTML = ''
+  document.getElementById('prog').style.width = '0%'
+  document.getElementById('prog-label').textContent = 'PRESS PLAY TO START'
+  document.getElementById('btn-play').classList.remove('playing')
+  document.getElementById('btn-play').textContent = '▶  PLAY'
+  document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active','done'))
+  document.getElementById('sb-posts').textContent = '47'
+  document.getElementById('sb-evo').textContent = '4'
+  document.getElementById('sb-regime').textContent = '—'
+}
+</script>
+</body>
+</html>
