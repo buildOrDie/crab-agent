@@ -79,6 +79,14 @@ nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(5,0,0,.95);backd
 .btn-secondary{background:transparent;color:var(--red3);border:1px solid rgba(232,32,32,.3)}
 .btn-secondary:hover{border-color:var(--red2);background:rgba(232,32,32,.08);transform:translateY(-3px);box-shadow:0 8px 25px rgba(232,32,32,.15)}
 
+/* CA BOX */
+.ca-box{margin-top:1.5rem;background:var(--dark2);border:1px solid rgba(232,32,32,.25);border-radius:6px;padding:.7rem 1.2rem;display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;transition:.3s;position:relative;max-width:100%;animation:fadeInUp .8s ease-out both;animation-delay:1.2s}
+.ca-box:hover{border-color:var(--red2);background:rgba(232,32,32,.06);box-shadow:0 4px 20px rgba(232,32,32,.15)}
+.ca-label{font-family:var(--orb);font-size:.6rem;color:var(--red2);letter-spacing:3px;flex-shrink:0}
+.ca-addr{font-size:.62rem;color:rgba(255,255,255,.7);letter-spacing:1px;word-break:break-all;line-height:1.4}
+.ca-copy{font-size:.85rem;flex-shrink:0}
+.ca-copied{position:absolute;top:-28px;right:0;font-size:.6rem;color:var(--gold);letter-spacing:2px;opacity:0;transition:opacity .3s}
+
 /* SECTIONS */
 section{padding:7rem 2rem;max-width:1200px;margin:0 auto}
 .section-label{font-size:.6rem;letter-spacing:6px;color:var(--red3);margin-bottom:.75rem;opacity:.6;text-transform:uppercase}
@@ -152,7 +160,8 @@ section{padding:7rem 2rem;max-width:1200px;margin:0 auto}
 /* FOOTER */
 footer{border-top:1px solid rgba(232,32,32,.08);padding:4rem 2rem;text-align:center}
 .footer-logo{font-family:var(--orb);font-size:1.8rem;letter-spacing:8px;margin-bottom:1rem;background:linear-gradient(135deg,#FF2222,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.footer-sub{font-size:.6rem;color:rgba(255,255,255,.2);letter-spacing:4px;margin-bottom:2rem}
+.footer-sub{font-size:.6rem;color:rgba(255,255,255,.2);letter-spacing:4px;margin-bottom:1rem}
+.footer-ca{font-size:.6rem;color:var(--red3);letter-spacing:1px;margin-bottom:2rem;word-break:break-all;opacity:.7}
 .footer-links{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
 .footer-links a{font-size:.62rem;color:rgba(232,32,32,.45);text-decoration:none;letter-spacing:3px;transition:.3s}
 .footer-links a:hover{color:var(--red2)}
@@ -209,8 +218,14 @@ footer{border-top:1px solid rgba(232,32,32,.08);padding:4rem 2rem;text-align:cen
         An autonomous AI agent for $CRAB on pump.fun. Uses quantum-assisted wavefunction collapse to select meme modes, learns from market conditions, and evolves its personality over time. The crab walks sideways — straight to 100x.
       </p>
       <div class="hero-btns">
-        <a href="https://pump.fun" target="_blank" class="btn btn-primary">BUY ON PUMP.FUN</a>
-        <a href="https://github.com/buildOrDie/crab-agent" target="_blank" class="btn btn-secondary">VIEW SOURCE</a>
+        <a href="https://pump.fun/coin/FzoFZ2XTypgojG9iE3Kuo58ocHFs5zVKDhqwa4Utpump" target="_blank" class="btn btn-primary">BUY ON PUMP.FUN</a>
+        <a href="https://github.com/adaEggs/crab-agent" target="_blank" class="btn btn-secondary">VIEW SOURCE</a>
+      </div>
+      <div class="ca-box" onclick="navigator.clipboard.writeText('FzoFZ2XTypgojG9iE3Kuo58ocHFs5zVKDhqwa4Utpump').then(()=>{this.querySelector('.ca-copied').style.opacity=1;setTimeout(()=>{this.querySelector('.ca-copied').style.opacity=0},1500)})">
+        <span class="ca-label">CA:</span>
+        <span class="ca-addr">FzoFZ2XTypgojG9iE3Kuo58ocHFs5zVKDhqwa4Utpump</span>
+        <span class="ca-copy">📋</span>
+        <span class="ca-copied">Copied!</span>
       </div>
     </div>
   </div>
@@ -484,9 +499,10 @@ footer{border-top:1px solid rgba(232,32,32,.08);padding:4rem 2rem;text-align:cen
 <footer>
   <div class="footer-logo">$CRAB</div>
   <div class="footer-sub">THE CRAB WALKS SIDEWAYS — STRAIGHT TO 100X</div>
+  <div class="footer-ca">CA: FzoFZ2XTypgojG9iE3Kuo58ocHFs5zVKDhqwa4Utpump</div>
   <div class="footer-links">
-    <a href="https://pump.fun" target="_blank">PUMP.FUN</a>
-    <a href="https://github.com/buildOrDie/crab-agent" target="_blank">GITHUB</a>
+    <a href="https://pump.fun/coin/FzoFZ2XTypgojG9iE3Kuo58ocHFs5zVKDhqwa4Utpump" target="_blank">PUMP.FUN</a>
+    <a href="https://github.com/adaEggs/crab-agent" target="_blank">GITHUB</a>
     <a href="https://twitter.com" target="_blank">TWITTER/X</a>
   </div>
   <div class="footer-copy">© 2025 $CRAB AGENT — FUELED BY CRAB BRAIN</div>
