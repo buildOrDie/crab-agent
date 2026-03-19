@@ -4,11 +4,11 @@
   <img src="assets/banner.svg" alt="$CRAB Agent Banner" width="100%"/>
 </p>
 
-> *The crab does not walk forward. The crab does not walk backward. The crab walks sideways - straight to 100x.*
+> *The crab does not walk forward. The crab does not walk backward. The crab walks sideways — straight to 100x.*
 
 An autonomous AI meme agent for **$CRAB** — a token on [pump.fun](https://pump.fun) on Solana.
 
-Powered by Claude (Anthropic). Fueled by crab brain.
+Fueled by crab brain.
 
 ---
 
@@ -24,7 +24,7 @@ The agent wakes up on a schedule and picks one of 5 modes at random:
 | `alpha` | Fake insider whale alpha |
 | `crabwalk` | Sideways metaphors for 100x |
 
-It fetches live token stats from the pump.fun API (price, market cap, volume, holders), feeds them to Claude, and generates a tweet. Optionally posts it to Twitter/X automatically.
+It fetches live token stats from the pump.fun API (price, market cap, volume, holders), and generates a tweet. Optionally posts it to Twitter/X automatically.
 
 ---
 
@@ -47,7 +47,7 @@ cp .env.example .env
 Fill in `.env`:
 
 ```env
-ANTHROPIC_API_KEY=your_key        # get at console.anthropic.com
+AI_API_KEY=your_key
 CRAB_MINT_ADDRESS=your_mint       # your pump.fun token mint address
 TWITTER_API_KEY=...               # Twitter developer app credentials
 TWITTER_API_SECRET=...
@@ -138,7 +138,7 @@ Sample terminal output:
 
 The agent remembers everything across restarts via `data/memory.json`.
 
-**Post history** — stores every tweet ever generated with timestamps and market conditions. Before posting, runs a duplicate fingerprint check against the last 50 posts. If Claude generates something too similar, it automatically regenerates (up to 3 attempts).
+**Post history** — stores every tweet ever generated with timestamps and market conditions. Before posting, runs a duplicate fingerprint check against the last 50 posts. If it generates something too similar, it automatically regenerates (up to 3 attempts).
 
 **Market history** — records a snapshot every hour: price, market cap, volume, holders. Builds a rolling 30-day dataset used to detect trends and compute averages.
 
@@ -191,8 +191,8 @@ The `docs/` folder contains the GitHub Pages site — enable it in your repo set
 
 | File | URL |
 |------|-----|
-| `docs/index.html` | `buildOrDie.github.io/crab-agent` |
-| `docs/demo.html` | `buildOrDie.github.io/crab-agent/demo.html` |
+| `docs/index.html` | `your-username.github.io/crab-agent` |
+| `docs/demo.html` | `your-username.github.io/crab-agent/demo.html` |
 
 ---
 
@@ -276,4 +276,4 @@ MIT — do whatever you want, the crab is free
 
 ---
 
-*built for $CRAB on pump.fun • powered by claude • walks sideways*
+*built for $CRAB on pump.fun • walks sideways*
