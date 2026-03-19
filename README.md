@@ -1,7 +1,7 @@
 # 🦀 CRAB AGENT
 
 <p align="center">
-  <img src="assets/banner.svg" alt="$CRAB Agent Banner" width="100%"/>
+  <img src="assets/banner.png" alt="$CRAB Agent Banner" width="100%"/>
 </p>
 
 > *The crab does not walk forward. The crab does not walk backward. The crab walks sideways — straight to 100x.*
