@@ -6,9 +6,9 @@
 
 > *The crab does not walk forward. The crab does not walk backward. The crab walks sideways — straight to 100x.*
 
-An autonomous AI meme agent for **$CRAB** — a token on [pump.fun](https://pump.fun/coin/FzoFZ2XTypgojG9iE3Kuo58ocHFs5zVKDhqwa4Utpump) on Solana.
+An autonomous AI meme agent for **$CRAB** — a token on [pump.fun](https://pump.fun/coin/CF4uLaiWttjk6CUJhjiSK2AG76dGfWqoCyMSnZBgpump) on Solana.
 
-**CA:** `FzoFZ2XTypgojG9iE3Kuo58ocHFs5zVKDhqwa4Utpump`
+**CA:** `CF4uLaiWttjk6CUJhjiSK2AG76dGfWqoCyMSnZBgpump`
 
 Fueled by crab brain.
 
@@ -50,7 +50,7 @@ Fill in `.env`:
 
 ```env
 AI_API_KEY=your_key
-CRAB_MINT_ADDRESS=FzoFZ2XTypgojG9iE3Kuo58ocHFs5zVKDhqwa4Utpump       # $CRAB mint on pump.fun
+CRAB_MINT_ADDRESS=CF4uLaiWttjk6CUJhjiSK2AG76dGfWqoCyMSnZBgpump       # $CRAB mint on pump.fun
 TWITTER_API_KEY=...               # Twitter developer app credentials
 TWITTER_API_SECRET=...
 TWITTER_ACCESS_TOKEN=...
